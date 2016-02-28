@@ -54,7 +54,7 @@ func Serve(listenAddr string) {
 	}))
 	m.Use(requestContext())
 
-	m.Group(API_PREFIX, APIRoute())
+	m.Group("", AuthServer, MsgHandle)
 
 	logger := logrus.StandardLogger()
 	server := &http.Server{
