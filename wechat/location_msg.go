@@ -6,7 +6,7 @@ import (
 )
 
 type LocationMsg struct {
-	Msg
+	MsgInfo
 	Location_X float64 `xml: "Location_X"`
 	Location_Y float64 `xml: "Location_Y"`
 	Scale      int     `xml: "Scale"`

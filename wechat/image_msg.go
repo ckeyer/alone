@@ -6,7 +6,7 @@ import (
 )
 
 type ImageMsg struct {
-	Msg
+	MsgInfo
 	PicUrl  string `xml:"PicUrl"`
 	MediaId int    `xml:"MediaId"`
 	MsgId   int64  `xml:"MsgId"`

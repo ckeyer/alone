@@ -1,7 +1,7 @@
 package api
 
 import (
-	"encoding/xml"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/ckeyer/alone/wechat"
@@ -22,16 +22,24 @@ func AuthServer(ctx *RequestContext) {
 
 func MsgHandle(w http.ResponseWriter, req *http.Request, ctx *RequestContext) {
 	msg := &wechat.Msg{}
-	err := xml.NewDecoder(ctx.req).Decode(msg)
+	bs, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Error(err.Error())
+		log.Error(err)
 		ctx.render.Error(http.StatusBadRequest)
 		return
 	}
+
+	data, err := wechat.MsgHandle(bs)
+	if err != nil {
+		ctx.render.Error(http.StatusBadRequest)
+		log.Error(err)
+		return
+	}
+
+	ctx.render.XML(http.StatusOK, data)
 
 	log.Debug("msg type: ", msg.MsgType)
 	log.Debug("msg from: ", msg.FromUserName)
 	log.Debug("msg to: ", msg.ToUserName)
 	log.Debug("msg create time: ", msg.CreateTime)
-
 }

@@ -7,7 +7,7 @@ import (
 
 // 点击事件结构体
 type ClickEvent struct {
-	Msg
+	MsgInfo
 	EventKey string `xml:"EventKey"`
 }
 
@@ -28,4 +28,8 @@ func (c *ClickEvent) Insert() error {
 		c.Id = id
 	}
 	return err
+}
+
+func (t *ClickEvent) MsgHandle() (interface{}, error) {
+	return NewTextResposeMessage(t.ToUserName, t.FromUserName, "Go Go Go!!!"), nil
 }
