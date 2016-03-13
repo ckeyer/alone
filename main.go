@@ -9,10 +9,6 @@ import (
 	logpkg "github.com/ckeyer/go-log"
 )
 
-const (
-	API_PREFIX = ""
-)
-
 var (
 	log = logpkg.GetDefaultLogger("wechat")
 

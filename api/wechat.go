@@ -4,8 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/ckeyer/alone/wechat"
-	"github.com/go-martini/martini"
+	"github.com/ckeyer/wechat"
 )
 
 func AuthServer(ctx *RequestContext) {
@@ -21,7 +20,7 @@ func AuthServer(ctx *RequestContext) {
 }
 
 func MsgHandle(w http.ResponseWriter, req *http.Request, ctx *RequestContext) {
-	msg := &wechat.Msg{}
+	msg := &wechat.MsgInfo{}
 	bs, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Error(err)

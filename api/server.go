@@ -15,6 +15,7 @@ import (
 
 const (
 	API_PREFIX = "/api"
+	WX_PREFIX  = "/wechat"
 )
 
 var (
@@ -54,7 +55,7 @@ func Serve(listenAddr string) {
 	}))
 	m.Use(requestContext())
 
-	m.Group("", AuthServer, MsgHandle)
+	m.Post(WX_PREFIX, AuthServer, MsgHandle)
 
 	logger := logrus.StandardLogger()
 	server := &http.Server{
