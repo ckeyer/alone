@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-
-	mysqldb "github.com/ckeyer/commons/db/mysql"
 )
 
 var (
@@ -14,9 +12,8 @@ var (
 )
 
 type Config struct {
-	App    AppConfig           `json:"app"`
-	Mysql  mysqldb.MysqlConfig `json:"mysql"`
-	WeChat WeChat              `json:"wechat"`
+	App    AppConfig `json:"app"`
+	WeChat WeChat    `json:"wechat"`
 }
 
 type AppConfig struct {

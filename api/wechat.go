@@ -4,10 +4,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/ckeyer/wechat"
+	"github.com/ckeyer/alone/wechat"
 )
 
-func AuthServer(ctx *RequestContext) {
+func AuthServerMW(ctx *RequestContext) {
 	signature := ctx.params["signature"]
 	timestamp := ctx.params["timestamp"]
 	nonce := ctx.params["nonce"]
@@ -15,15 +15,22 @@ func AuthServer(ctx *RequestContext) {
 
 	if !wechat.Auth(signature, timestamp, nonce, echostr) {
 		ctx.render.Error(http.StatusUnauthorized)
-		log.Debug("auth failed")
+		log.Warningf("auth failed, params: %v", ctx.params)
+		return
+	}
+
+	if ctx.req.Method == "GET" {
+		log.Notice("wechat auth success")
+		ctx.render.Text(200, echostr)
+	} else {
+		log.Debugf("wechat auth success")
 	}
 }
 
 func MsgHandle(w http.ResponseWriter, req *http.Request, ctx *RequestContext) {
-	msg := &wechat.MsgInfo{}
 	bs, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("get body failed, error: %s", err.Error())
 		ctx.render.Error(http.StatusBadRequest)
 		return
 	}
@@ -31,14 +38,9 @@ func MsgHandle(w http.ResponseWriter, req *http.Request, ctx *RequestContext) {
 	data, err := wechat.MsgHandle(bs)
 	if err != nil {
 		ctx.render.Error(http.StatusBadRequest)
-		log.Error(err)
+		log.Errorf("handle wechat message failed, error: %s", err.Error())
 		return
 	}
 
-	ctx.render.XML(http.StatusOK, data)
-
-	log.Debug("msg type: ", msg.MsgType)
-	log.Debug("msg from: ", msg.FromUserName)
-	log.Debug("msg to: ", msg.ToUserName)
-	log.Debug("msg create time: ", msg.CreateTime)
+	ctx.render.XML(200, data)
 }

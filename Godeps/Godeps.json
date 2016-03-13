@@ -3,8 +3,14 @@
 	"GoVersion": "go1.6",
 	"Deps": [
 		{
-			"ImportPath": "github.com/ckeyer/commons/db/mysql",
-			"Rev": "85180712d2645f7f41033fab49ba62f54bc04100"
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.8.7-30-g4643a7e",
+			"Rev": "4643a7efec9b8fd7548882e7b30095711343100f"
+		},
+		{
+			"ImportPath": "github.com/astaxie/beego/orm",
+			"Comment": "v1.5.0-389-g23bb36d",
+			"Rev": "23bb36d35cf83ca8b95c4432aa846326530d24b9"
 		},
 		{
 			"ImportPath": "github.com/ckeyer/go-log",
@@ -24,6 +30,10 @@
 			"ImportPath": "github.com/go-sql-driver/mysql",
 			"Comment": "v1.2-118-g3dd7008",
 			"Rev": "3dd7008ac1529aca1bcd8a9db75228a71ba23cac"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/cors",
+			"Rev": "553b9208d353a39b0850c02355f478ba020c86d7"
 		},
 		{
 			"ImportPath": "github.com/martini-contrib/render",

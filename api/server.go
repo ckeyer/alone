@@ -31,6 +31,12 @@ type RequestContext struct {
 	mc     martini.Context
 }
 
+func (ctx *RequestContext) XML(status int, data string) {
+	ctx.res.Header().Add("Content-Type", "text/xml")
+	ctx.res.WriteHeader(status)
+	ctx.res.Write([]byte(data))
+}
+
 func init() {
 	headers = make(map[string]string)
 	headers["Access-Control-Allow-Origin"] = "*"
@@ -45,17 +51,22 @@ func Serve(listenAddr string) {
 	m := NewMartini()
 
 	m.Use(httpLogger)
-	m.Use(cors.Allow(&cors.Options{
+	// m.Use(
+	cors.Allow(&cors.Options{
 		AllowOrigins:     strings.Split(headers["Access-Control-Allow-Origin"], ","),
 		AllowMethods:     strings.Split(headers["Access-Control-Allow-Methods"], ","),
 		AllowHeaders:     strings.Split(headers["Access-Control-Allow-Headers"], ","),
 		ExposeHeaders:    strings.Split(headers["Access-Control-Expose-Headers"], ","),
 		AllowCredentials: true,
 		MaxAge:           time.Second * 864000,
-	}))
+	})
+	// )
 	m.Use(requestContext())
 
-	m.Post(WX_PREFIX, AuthServer, MsgHandle)
+	m.Group(WX_PREFIX, func(r martini.Router) {
+		r.Get("")
+		r.Post("", MsgHandle)
+	}, AuthServerMW)
 
 	logger := logrus.StandardLogger()
 	server := &http.Server{
@@ -81,7 +92,7 @@ func NewMartini() *martini.ClassicMartini {
 }
 
 func httpLogger(rw http.ResponseWriter, req *http.Request, c martini.Context) {
-	log.Infof(" %s %s", req.URL.Path, req.URL.Query())
+	log.Infof("%s %s %s", req.Method, req.URL.Path, req.URL.Query())
 	c.Next()
 	log.Infof("%s", "that is gone")
 }
@@ -90,14 +101,6 @@ func requestContext() martini.Handler {
 	return func(c martini.Context, res http.ResponseWriter, req *http.Request, rnd render.Render) {
 		res.Header().Set("X-Frame-Options", "SAMEORIGIN")
 		res.Header().Set("X-XSS-Protection", "1; mode=block")
-		if API_PREFIX != "" && !strings.HasPrefix(req.URL.Path, API_PREFIX) {
-			return
-		}
-
-		if strings.Contains(req.URL.Path, "/webhook") || strings.Contains(req.URL.Path, "/metadata") {
-			// Otherwise a persistent connection to mongodb will be created.
-			return
-		}
 
 		res.Header().Set("Cache-Control", "no-cache")
 		ctx := &RequestContext{
