@@ -30,10 +30,10 @@ type ResponseMessage struct {
 	Url          *CData `xml:"Url,omitempty"`
 }
 
-func NewTextResposeMessage(from, to, content string) *ResponseMessage {
+func NewTextResposeMessage(from, to *CData, content string) *ResponseMessage {
 	rs := &ResponseMessage{
-		ToUserName:   &CData{to},
-		FromUserName: &CData{from},
+		ToUserName:   to,
+		FromUserName: from,
 		CreateTime:   time.Now().Unix(),
 		MsgType:      &CData{"text"},
 		Content:      &CData{content},

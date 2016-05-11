@@ -12,8 +12,9 @@ var (
 )
 
 type Config struct {
-	App    AppConfig `json:"app"`
-	WeChat WeChat    `json:"wechat"`
+	App         *AppConfig   `json:"app"`
+	WeChat      *WeChat      `json:"wechat"`
+	TuringRobot *TuringRobot `json:"turing_robot,omitempty"`
 }
 
 type AppConfig struct {
@@ -28,6 +29,12 @@ type WeChat struct {
 	AppId          string `json:"app_id"`
 	AppSecret      string `json:"app_secret"`
 	EncodingAESKey string `json:"encoding_aes_key"`
+}
+
+type TuringRobot struct {
+	APIURL string `json:"api_url"`
+	APIKey string `json:"api_key"`
+	Secret string `json:"secret"`
 }
 
 // LoadConfigFile 从文件加载配置内容

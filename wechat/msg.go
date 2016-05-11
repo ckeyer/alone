@@ -7,12 +7,12 @@ import (
 )
 
 type MsgInfo struct {
-	ID           int64 `xml:"omitempty",orm:"id"`
-	MsgType      CData `xml:"MsgType",orm:"MsgType"`
-	Event        CData `xml:"Event",orm:"Event"`
-	ToUserName   CData `xml:"ToUserName",orm:"ToUserName"`
-	FromUserName CData `xml:"FromUserName",orm:"FromUserName"`
-	CreateTime   int   `xml:"CreateTime",orm:"CreateTime"`
+	ID           int64  `xml:"omitempty",orm:"id"`
+	MsgType      *CData `xml:"MsgType",orm:"MsgType"`
+	Event        *CData `xml:"Event",orm:"Event"`
+	ToUserName   *CData `xml:"ToUserName",orm:"ToUserName"`
+	FromUserName *CData `xml:"FromUserName",orm:"FromUserName"`
+	CreateTime   int    `xml:"CreateTime",orm:"CreateTime"`
 }
 
 func MsgHandle(data []byte) (rm *ResponseMessage, err error) {
@@ -41,7 +41,7 @@ func MsgHandle(data []byte) (rm *ResponseMessage, err error) {
 	if arc, ok := msg.(Archiver); ok {
 		err = arc.Archive()
 		if err != nil {
-			log.Errorf("Archived err, ", err)
+			log.Errorf("Archived failed, error: %s", err)
 		}
 	}
 	return msg.MsgHandle()
@@ -83,5 +83,5 @@ func (m *MsgInfo) getResource() MsgHandler {
 
 // default auto response
 func (m *MsgInfo) MsgHandle() (*ResponseMessage, error) {
-	return NewTextResposeMessage(m.ToUserName.Content, m.FromUserName.Content, time.Now().String()), nil
+	return NewTextResposeMessage(m.ToUserName, m.FromUserName, time.Now().String()), nil
 }
