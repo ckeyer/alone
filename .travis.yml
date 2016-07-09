@@ -2,9 +2,5 @@ language: go
 
 go:
   - 1.6
-  - 1.5
-
-install:
-  - go get github.com/tools/godep
 
 script: make test

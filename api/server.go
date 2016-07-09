@@ -6,8 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Sirupsen/logrus"
-	logpkg "github.com/ckeyer/go-log"
+	log "github.com/Sirupsen/logrus"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/cors"
 	"github.com/martini-contrib/render"
@@ -19,7 +18,6 @@ const (
 )
 
 var (
-	log     = logpkg.GetDefaultLogger("go-ci")
 	headers map[string]string
 )
 
@@ -68,14 +66,14 @@ func Serve(listenAddr string) {
 		r.Post("", MsgHandle)
 	}, AuthServerMW)
 
-	logger := logrus.StandardLogger()
+	logger := log.StandardLogger()
 	server := &http.Server{
 		Handler:  m,
 		Addr:     listenAddr,
 		ErrorLog: stdlog.New(logger.Writer(), "", 0),
 	}
 
-	log.Notice("server is starting on ", listenAddr)
+	log.Info("server is starting on ", listenAddr)
 	if err := server.ListenAndServe(); err != nil {
 		log.Error(err)
 	}

@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 const (
@@ -24,7 +26,7 @@ type AccessToken struct {
 // 更新微信的AccessToken到Redis中 key=REDIS_KEY_WC_ACCESS_TOKEN
 func UpdateAccessToken() (expires_in int, err error) {
 	url := "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" +
-		config.WeChat.AppId + "&secret=" + config.WeChat.AppSecret
+		wcAppID + "&secret=" + wcAppSecret
 
 	if req, err := http.Get(url); err != nil {
 		log.Error(err)
@@ -47,7 +49,7 @@ func UpdateAccessToken() (expires_in int, err error) {
 		access_token = v.AccessToken
 		expires_in = (int)(v.ExpiresIn)
 
-		log.Notice("Successful: get AccessToken ")
+		log.Info("Successful: get AccessToken ")
 	}
 	return
 }

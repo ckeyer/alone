@@ -7,3 +7,7 @@ type MsgHandler interface {
 type Archiver interface {
 	Archive() error
 }
+
+type TextReader interface {
+	String() string
+}

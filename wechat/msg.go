@@ -3,7 +3,9 @@ package wechat
 import (
 	"encoding/xml"
 	"fmt"
-	"time"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/ckeyer/alone/tuling"
 )
 
 type MsgInfo struct {
@@ -44,6 +46,7 @@ func MsgHandle(data []byte) (rm *ResponseMessage, err error) {
 			log.Errorf("Archived failed, error: %s", err)
 		}
 	}
+
 	return msg.MsgHandle()
 }
 
@@ -83,5 +86,5 @@ func (m *MsgInfo) getResource() MsgHandler {
 
 // default auto response
 func (m *MsgInfo) MsgHandle() (*ResponseMessage, error) {
-	return NewTextResposeMessage(m.ToUserName, m.FromUserName, time.Now().String()), nil
+	return NewTextResposeMessage(m.ToUserName, m.FromUserName, tuling.Reply("知之为知之")), nil
 }

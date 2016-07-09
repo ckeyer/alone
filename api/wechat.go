@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/ckeyer/alone/wechat"
 )
 
@@ -20,7 +21,7 @@ func AuthServerMW(ctx *RequestContext) {
 	}
 
 	if ctx.req.Method == "GET" {
-		log.Notice("wechat auth success")
+		log.Info("wechat auth success")
 		ctx.render.Text(200, echostr)
 	} else {
 		log.Debugf("wechat auth success")

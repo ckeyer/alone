@@ -6,9 +6,10 @@
 # Folders
 _obj
 _test
-conf/*.json
+conf/*.yaml
 app
 bin
+Godeps
 
 # Architecture specific extensions/prefixes
 *.[568vq]
